@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -64,6 +64,10 @@ const Game = () => {
     console.log(`${numOfGeneratedCookies} PER SECOND`);
     setNumcookies(numCookies + numOfGeneratedCookies);
   }, 1000);
+
+  useEffect(() => {
+    document.title = `${numCookies} cookies - Cookie Clicker`;
+  }, [numCookies]);
 
   return (
     <Wrapper>

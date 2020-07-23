@@ -25,8 +25,6 @@ const Game = () => {
     farm: 0,
   });
 
-  const [cookiesPerSec, setCookiesPerSec] = useState(0);
-
   const handleCookieClick = (num) => {
     setNumcookies(numCookies + num);
   };
@@ -40,8 +38,11 @@ const Game = () => {
 
   const handleClick = (item) => {
     console.log("clicked on " + item.name);
-    setNumcookies(numCookies - item.cost);
-    purchasedItemsUpdater(item.name.toLowerCase());
+    const cookiesLeft = numCookies - item.cost;
+    if (cookiesLeft > 0) {
+      setNumcookies(cookiesLeft);
+      purchasedItemsUpdater(item.name.toLowerCase());
+    }
   };
 
   const calculateCookiesPerTick = (purchasedItems) => {
@@ -57,11 +58,11 @@ const Game = () => {
     return cookies;
   };
 
+  const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
+
   useInterval(() => {
-    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
     console.log(`${numOfGeneratedCookies} PER SECOND`);
     setNumcookies(numCookies + numOfGeneratedCookies);
-    setCookiesPerSec(numOfGeneratedCookies);
   }, 1000);
 
   return (
@@ -70,7 +71,7 @@ const Game = () => {
         <Indicator>
           <Total>{numCookies} cookies</Total>
           {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>{cookiesPerSec}</strong> cookies per second
+          <strong>{numOfGeneratedCookies}</strong> cookies per second
         </Indicator>
         <Button>
           <Cookie src={cookieSrc} onClick={() => handleCookieClick(1)} />

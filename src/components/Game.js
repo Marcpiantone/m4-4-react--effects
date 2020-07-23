@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import cookieSrc from "../cookie.svg";
 import Item from "./Item";
 
+import useInterval from "../hooks/use-interval.hook";
+
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
@@ -23,15 +25,10 @@ const Game = () => {
     farm: 0,
   });
 
+  const [cookiesPerSec, setCookiesPerSec] = useState(0);
+
   const handleCookieClick = (num) => {
     setNumcookies(numCookies + num);
-  };
-
-  const cursorItemUpdater = (num) => {
-    setPurchasedItems({
-      ...purchasedItems,
-      cursor: num + purchasedItems.cursor,
-    });
   };
 
   const purchasedItemsUpdater = (item) => {
@@ -43,10 +40,29 @@ const Game = () => {
 
   const handleClick = (item) => {
     console.log("clicked on " + item.name);
-    purchasedItemsUpdater(item.name.toLowerCase(), 2);
-    //cursorItemUpdater(1);
-    console.log(purchasedItems);
+    setNumcookies(numCookies - item.cost);
+    purchasedItemsUpdater(item.name.toLowerCase());
   };
+
+  const calculateCookiesPerTick = (purchasedItems) => {
+    let cookies = 0;
+
+    const getItemByid = (id) => {
+      return items.find((item) => item.id.toLowerCase() === id);
+    };
+
+    for (const item in purchasedItems) {
+      cookies = getItemByid(item).value * purchasedItems[item] + cookies;
+    }
+    return cookies;
+  };
+
+  useInterval(() => {
+    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
+    console.log(`${numOfGeneratedCookies} PER SECOND`);
+    setNumcookies(numCookies + numOfGeneratedCookies);
+    setCookiesPerSec(numOfGeneratedCookies);
+  }, 1000);
 
   return (
     <Wrapper>
@@ -54,7 +70,7 @@ const Game = () => {
         <Indicator>
           <Total>{numCookies} cookies</Total>
           {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>0</strong> cookies per second
+          <strong>{cookiesPerSec}</strong> cookies per second
         </Indicator>
         <Button>
           <Cookie src={cookieSrc} onClick={() => handleCookieClick(1)} />

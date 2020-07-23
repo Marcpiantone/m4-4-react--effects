@@ -2,7 +2,16 @@ import React from "react";
 import styled from "styled-components";
 
 const ItemButton = styled.button`
+  margin: 1 0px;
+  background: none;
+  text-align: left;
+  color: white;
   line-height: 2em;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid grey;
+  outline: none;
 `;
 
 const Title = styled.h4`

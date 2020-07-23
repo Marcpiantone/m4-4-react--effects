@@ -22,7 +22,7 @@ const Text = styled.p``;
 
 const Item = ({ item, purchasedItems, handleClick }) => {
   return (
-    <ItemButton onClick={() => handleClick(item)}>
+    <ItemButton key={item.name} onClick={() => handleClick(item)}>
       <Title>{item.name}</Title>
       <Text>
         Cost {item.cost} cookie(s). Produces {item.value} cookies/second.

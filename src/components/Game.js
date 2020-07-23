@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -11,17 +11,41 @@ const items = [
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
 
-const handleClick = (item) => {
-  console.log("clicked on " + item.name);
-};
-
 const Game = () => {
   // TODO: Replace this with React state!
-  const numCookies = 100;
-  const purchasedItems = {
+  //const numCookies = 100;
+
+  const [numCookies, setNumcookies] = useState(100);
+
+  const [purchasedItems, setPurchasedItems] = useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
+  });
+
+  const handleCookieClick = (num) => {
+    setNumcookies(numCookies + num);
+  };
+
+  const cursorItemUpdater = (num) => {
+    setPurchasedItems({
+      ...purchasedItems,
+      cursor: num + purchasedItems.cursor,
+    });
+  };
+
+  const purchasedItemsUpdater = (item) => {
+    setPurchasedItems({
+      ...purchasedItems,
+      [item]: 1 + purchasedItems[item],
+    });
+  };
+
+  const handleClick = (item) => {
+    console.log("clicked on " + item.name);
+    purchasedItemsUpdater(item.name.toLowerCase(), 2);
+    //cursorItemUpdater(1);
+    console.log(purchasedItems);
   };
 
   return (
@@ -33,7 +57,7 @@ const Game = () => {
           <strong>0</strong> cookies per second
         </Indicator>
         <Button>
-          <Cookie src={cookieSrc} />
+          <Cookie src={cookieSrc} onClick={() => handleCookieClick(1)} />
         </Button>
       </GameArea>
 
@@ -45,7 +69,7 @@ const Game = () => {
               item={item}
               purchasedItems={purchasedItems}
               handleClick={handleClick}
-            ></Item>
+            />
           );
         })}
       </ItemArea>

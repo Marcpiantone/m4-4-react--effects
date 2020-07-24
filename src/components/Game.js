@@ -20,7 +20,7 @@ const Game = () => {
     grandma: 0,
     farm: 0,
   });
-
+  console.log("COOKIE", numCookies);
   const handleCookieClick = () => {
     setNumcookies(numCookies + 1);
   };
@@ -33,7 +33,7 @@ const Game = () => {
   };
 
   const handleClick = (item) => {
-    console.log("clicked on " + item.name);
+    // console.log("clicked on " + item.name);
     const cookiesLeft = numCookies - item.cost;
     if (cookiesLeft > 0) {
       setNumcookies(cookiesLeft);
@@ -57,8 +57,8 @@ const Game = () => {
   const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
 
   useInterval(() => {
-    console.log(`${numCookies} TOTAL`);
-    console.log(`${numOfGeneratedCookies} PER SECOND`);
+    // console.log(`${numCookies} TOTAL`);
+    // console.log(`${numOfGeneratedCookies} PER SECOND`);
     setNumcookies(numCookies + numOfGeneratedCookies);
   }, 1000);
 
@@ -77,7 +77,7 @@ const Game = () => {
     return () => {
       window.removeEventListener("keydown", handleUserKeyPress);
     };
-  }, []);
+  });
 
   return (
     <Wrapper>

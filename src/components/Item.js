@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 
 const ItemButton = styled.button`
@@ -14,6 +14,7 @@ const ItemButton = styled.button`
   outline: none;
   display: flex;
   justify-content: space-between;
+  cursor: pointer;
 `;
 
 const Title = styled.h4`
@@ -35,6 +36,12 @@ const Infos = styled.p`
 
 const Item = ({ item, purchasedItems, handleClick }) => {
   const id = item.name.toLowerCase();
+
+  // const ref = useRef(null);
+
+  // useEffect(() => {
+  //   if ((item.name = "Counter")) ref.current.focus(item.name);
+  // }, [ItemButton]);
 
   return (
     <ItemButton key={item.name} onClick={() => handleClick(item)}>

@@ -14,19 +14,15 @@ const items = [
 ];
 
 const Game = () => {
-  // TODO: Replace this with React state!
-  //const numCookies = 100;
-
   const [numCookies, setNumcookies] = useState(100);
-
   const [purchasedItems, setPurchasedItems] = useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
   });
 
-  const handleCookieClick = (num) => {
-    setNumcookies(numCookies + num);
+  const handleCookieClick = () => {
+    setNumcookies(numCookies + 1);
   };
 
   const purchasedItemsUpdater = (item) => {
@@ -61,6 +57,7 @@ const Game = () => {
   const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
 
   useInterval(() => {
+    console.log(`${numCookies} TOTAL`);
     console.log(`${numOfGeneratedCookies} PER SECOND`);
     setNumcookies(numCookies + numOfGeneratedCookies);
   }, 1000);
@@ -68,6 +65,19 @@ const Game = () => {
   useEffect(() => {
     document.title = `${numCookies} cookies - Cookie Clicker`;
   }, [numCookies]);
+
+  const handleUserKeyPress = (ev) => {
+    if (ev.code === "Space") {
+      handleCookieClick();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleUserKeyPress);
+    return () => {
+      window.removeEventListener("keydown", handleUserKeyPress);
+    };
+  }, []);
 
   return (
     <Wrapper>
@@ -78,10 +88,9 @@ const Game = () => {
           <strong>{numOfGeneratedCookies}</strong> cookies per second
         </Indicator>
         <Button>
-          <Cookie src={cookieSrc} onClick={() => handleCookieClick(1)} />
+          <Cookie src={cookieSrc} onClick={() => handleCookieClick()} />
         </Button>
       </GameArea>
-
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
         {items.map((item) => {

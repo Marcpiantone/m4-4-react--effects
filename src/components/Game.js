@@ -5,7 +5,9 @@ import { Link } from "react-router-dom";
 import cookieSrc from "../cookie.svg";
 import Item from "./Item";
 
-import useInterval from "../hooks/use-interval.hook";
+import useInterval from "../hooks/useInterval.hook";
+import useKeydown from "../hooks/useKeydown.hook";
+import useDocumentTitle from "../hooks/useDocumentTitle.hook";
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
@@ -62,22 +64,9 @@ const Game = () => {
     setNumcookies(numCookies + numOfGeneratedCookies);
   }, 1000);
 
-  useEffect(() => {
-    document.title = `${numCookies} cookies - Cookie Clicker`;
-  }, [numCookies]);
+  useDocumentTitle(`${numCookies} cookies - Cookie Clicker`, `Cookie Clicker`);
 
-  const handleUserKeyPress = (ev) => {
-    if (ev.code === "Space") {
-      handleCookieClick();
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("keydown", handleUserKeyPress);
-    return () => {
-      window.removeEventListener("keydown", handleUserKeyPress);
-    };
-  });
+  useKeydown("Space", handleCookieClick);
 
   return (
     <Wrapper>
@@ -99,6 +88,7 @@ const Game = () => {
               item={item}
               purchasedItems={purchasedItems}
               handleClick={handleClick}
+              index={items.indexOf(item)}
             />
           );
         })}
